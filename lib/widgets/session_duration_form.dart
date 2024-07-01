@@ -109,10 +109,6 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
       padding: const EdgeInsets.all(24.0),
       child: Row(
         children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: minutesForm(),
-          ),
           const SizedBox(width: 10),
           Flexible(
             flex: 1,
@@ -133,21 +129,6 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
       onChanged: (value) {
         setState(() {
           _seconds = int.parse(value);
-        });
-      },
-    );
-  }
-
-  TextFormField minutesForm() {
-    return TextFormField(
-      initialValue: '0',
-      decoration:  InputDecoration(
-        labelText: Localization.of(context)?.translate('minutes') ?? 'Minutes',
-      ),
-      keyboardType: TextInputType.number,
-      onChanged: (value) {
-        setState(() {
-          _minutes = int.parse(value);
         });
       },
     );
