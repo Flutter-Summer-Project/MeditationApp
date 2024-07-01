@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:meditation_app/localization.dart';
+import 'package:meditation_app/boxes.dart';
+
 
 class SessionListWidget extends ConsumerStatefulWidget {
   const SessionListWidget({super.key});
@@ -11,16 +13,6 @@ class SessionListWidget extends ConsumerStatefulWidget {
 }
 
 class _SessionListWidgetState extends ConsumerState<SessionListWidget> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    openBox();
-  }
-
-  Future<void> openBox() async {
-    await Hive.openBox<String>('sessionBox');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +22,7 @@ class _SessionListWidgetState extends ConsumerState<SessionListWidget> {
       margin: const EdgeInsets.all(16),
       
       child: ValueListenableBuilder(
-        valueListenable: Hive.box<String>('sessionBox').listenable(),
+        valueListenable: sessionsBox.listenable(),
         builder: (context, Box<String> box, widget) {
           List<String> sessions = box.values.toList();
 

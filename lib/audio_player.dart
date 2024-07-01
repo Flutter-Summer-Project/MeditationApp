@@ -1,11 +1,7 @@
 import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerManager {
-  late AudioPlayer _audioPlayer;
-
-  Future<void> init() async {
-    _audioPlayer = AudioPlayer();
-  }
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   Future<void> playAudio(String selectedSongPath) async {
     await _audioPlayer.setUrl(selectedSongPath);

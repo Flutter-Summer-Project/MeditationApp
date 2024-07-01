@@ -12,8 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-
-import 'package:hive/hive.dart';
+import 'package:meditation_app/boxes.dart';
 
 
 class Timerwidget extends ConsumerStatefulWidget {
@@ -28,24 +27,10 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   late Duration phaseDuration;
   bool sessionDurationInitialized = false;
   Timer? timer;
-  late Box<String> box;
   final AudioPlayerManager audioPlayerManager = AudioPlayerManager();
   String _breathingStatus = 'Breathe in';
 
-  @override
-  void initState() {
-    super.initState();
-    openBox();
-    box = Hive.box<String>('sessionBox');
-    initializeAudioPlayer();
-  }
-
-  Future<void> openBox() async {
-    await Hive.openBox<String>('sessionBox');
-  }
-
   Future<void> initializeAudioPlayer() async {
-    await audioPlayerManager.init();
     if (mounted) {
       setState(() {});
     }
@@ -204,11 +189,11 @@ String textToAdd = '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTim
     '$sessionTime: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
     '$taskCompRate: ${((finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100).toStringAsFixed(0)}%\n'
     '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
-  
-  box.add(
-    textToAdd
+
+  sessionsBox.add(
+      textToAdd
     );
-}
+
   Widget mainTimerDisplay() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
 
