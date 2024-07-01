@@ -21,15 +21,10 @@ jobs:
 
       - run: flutter test test/unit_test.dart
 
-<<<<<<< HEAD
       - run: flutter analyze --no-fatal-warnings --no-fatal-infos lib/
-=======
-      - run: flutter analyze --no-fatal-warnings --no-fatal-infos lib/templates/lab7/
->>>>>>> 9291205cb93b05ae6a556007fc10980a7b7a94ab
 
       - run: flutter build web --release lib/main.dart
       
-
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           customArgs: "lib/main.dart"
