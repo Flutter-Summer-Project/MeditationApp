@@ -18,8 +18,11 @@ class _SessionScreenState extends ConsumerState<SessionScreen> {
     return Consumer(
       builder: (context, ref, child) {
         return Scaffold(
-          appBar: DefaultAppBar(title: Localization.of(context)?.translate('meditation') ?? 'Meditation', ref: ref),
-          body: const Timerwidget(),
+          appBar: DefaultAppBar(title: Localization.of(context)?.translate('meditation') ?? 'Meditation', automaticallyImplyLeading: false, ref: ref),
+          body: Container(
+            child: const Timerwidget(),
+          ),
+
           floatingActionButton: LanguageSwitcher(),
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         );
