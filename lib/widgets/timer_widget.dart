@@ -1,3 +1,4 @@
+import 'package:meditation_app/localization.dart';
 import 'package:meditation_app/providers/flag_provider.dart';
 import 'package:meditation_app/providers/rating_provider.dart';
 import 'package:meditation_app/providers/selected_session_provider.dart';
@@ -56,9 +57,9 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
         int periodDuration = session.getPhaseDuration().inSeconds;
         if (dif % periodDuration == 0) {
           if (dif % (2 * periodDuration) == 0) {
-            _breathingStatus = 'Breathe in';
+            _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
           } else {
-            _breathingStatus = 'Breathe out';
+            _breathingStatus = Localization.of(context)?.translate('breathe_out') ?? 'Breathe out';
           }
         }
 
@@ -88,7 +89,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            const Text("Session Timer", style: TextStyle(fontSize: 20),),
+             Text(Localization.of(context)?.translate('session_timer') ?? 'Session Timer', style: TextStyle(fontSize: 20),),
             mainTimerDisplay(),
             const SizedBox(height: 16),
             Text(_breathingStatus, style: const TextStyle(fontSize: 20),),
@@ -132,14 +133,14 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
                 ref.watch(flagNotifierProvider.notifier).setFlag(true);
               }
             },
-              child: timerIsRunning ? const Text('Pause') : const Text('Resume'),
+              child: timerIsRunning ?  Text(Localization.of(context)?.translate('pause') ?? 'Pause') :  Text(Localization.of(context)?.translate('resume') ?? 'Resume'),
             ),
             const SizedBox(width: 15),
             ElevatedButton(
               onPressed: () {
                 endSession();
               },
-             child: const Text('End session'),
+             child:  Text(Localization.of(context)?.translate('end_session') ?? 'End session'),
             )
         ],
         ),
@@ -149,7 +150,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
        padding: const EdgeInsets.all(24.0),
        child: ElevatedButton(
         onPressed: () => {playAudio(), startTimer()},
-         child: const Text('Start timer'),
+         child:  Text(Localization.of(context)?.translate('start_timer') ?? 'Start timer'),
         ),
      );
   }
@@ -170,7 +171,7 @@ void endSession() async {
   });
 
   addFinishedSession();
-  Navigator.pushNamed(context, '/post_session');
+  Navigator.pushNamed(context, '/');
 }
 
 void addFinishedSession() {
@@ -180,16 +181,23 @@ void addFinishedSession() {
 
   Session finishedSession = Session.sessionAndPeriodDurationInit(session.getSessionDuration() - sessionDuration, session.getPeriodDuration());
   finishedSessions.addSession(finishedSession);
-  
+
+  String newSession = Localization.of(context)?.translate('new_session') ?? 'New session';
+  String sessionTime = Localization.of(context)?.translate('session_time') ?? 'Session time';
+  String taskCompRate = Localization.of(context)?.translate('task_comp_rate') ?? 'Task completion rate';
+  String sessionRating = Localization.of(context)?.translate('rating') ?? 'Rating';
+  String noRating = Localization.of(context)?.translate('no_rating') ?? 'No rating';
+
+// Then, format the string
+String textToAdd = '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
+    '$sessionTime: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
+    '$taskCompRate: ${((finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100).toStringAsFixed(0)}%\n'
+    '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
+
   sessionsBox.add(
-      'Time: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
-      'Session time: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
-      'Task completion rate: ${(
-        (finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100
-        ).toStringAsFixed(0)}%\n'
-      'Rating: ${rating == '' ? 'No rating' : '$rating/5'}'
+      textToAdd
     );
-}
+
   Widget mainTimerDisplay() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
     return SizedBox(
