@@ -14,7 +14,6 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:meditation_app/boxes.dart';
 
-
 class Timerwidget extends ConsumerStatefulWidget {
   const Timerwidget({super.key});
 
@@ -39,24 +38,29 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   void startTimer() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
 
-    timer = Timer.periodic(const Duration(seconds: 1), (_){
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         if (sessionDuration.inSeconds <= 0) {
-          endSession(); 
+          endSession();
           return;
         }
 
         if (phaseDuration.inSeconds <= 0) {
           phaseDuration = session.getPhaseDuration();
         }
-        
-        int dif = session.getSessionDuration().inSeconds - sessionDuration.inSeconds;
+
+        int dif =
+            session.getSessionDuration().inSeconds - sessionDuration.inSeconds;
         int periodDuration = session.getPhaseDuration().inSeconds;
         if (dif % periodDuration == 0) {
           if (dif % (2 * periodDuration) == 0) {
-            _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
+            _breathingStatus =
+                Localization.of(context)?.translate('breathe_in') ??
+                    'Breathe in';
           } else {
-            _breathingStatus = Localization.of(context)?.translate('breathe_out') ?? 'Breathe out';
+            _breathingStatus =
+                Localization.of(context)?.translate('breathe_out') ??
+                    'Breathe out';
           }
         }
 
@@ -65,10 +69,8 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
         sessionDuration -= const Duration(seconds: 1);
         phaseDuration -= const Duration(seconds: 1);
       });
-    }
-    );
+    });
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +87,17 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-             Text(Localization.of(context)?.translate('session_timer') ?? 'Session Timer', style: TextStyle(fontSize: 20),),
+            Text(
+              Localization.of(context)?.translate('session_timer') ??
+                  'Session Timer',
+              style: TextStyle(fontSize: 20),
+            ),
             mainTimerDisplay(),
             const SizedBox(height: 16),
-            Text(_breathingStatus, style: const TextStyle(fontSize: 20),),
+            Text(
+              _breathingStatus,
+              style: const TextStyle(fontSize: 20),
+            ),
             phaseTimerDisplay(),
             const SizedBox(height: 16),
             HeartbeatAnimation(),
@@ -100,55 +109,60 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
     );
   }
 
-
   @override
   void dispose() {
     timer?.cancel();
     super.dispose();
   }
- 
+
   Widget startTimerButton() {
     final bool timerIsRunning = timer != null && timer!.isActive;
     final bool timerIsCompleted = sessionDuration.inSeconds <= 0;
 
-    return timerIsRunning || !timerIsCompleted && timer != null ?
-      Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              if (timerIsRunning) { 
-                setState(() => timer?.cancel());
-                audioPlayerManager.stopAudio();
-                ref.watch(flagNotifierProvider.notifier).setFlag(false);
-              } else {
-                startTimer();
-                audioPlayerManager.resumeAudio();
-                ref.watch(flagNotifierProvider.notifier).setFlag(true);
-              }
-            },
-              child: timerIsRunning ?  Text(Localization.of(context)?.translate('pause') ?? 'Pause') :  Text(Localization.of(context)?.translate('resume') ?? 'Resume'),
+    return timerIsRunning || !timerIsCompleted && timer != null
+        ? Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (timerIsRunning) {
+                      setState(() => timer?.cancel());
+                      audioPlayerManager.stopAudio();
+                      ref.watch(flagNotifierProvider.notifier).setFlag(false);
+                    } else {
+                      startTimer();
+                      audioPlayerManager.resumeAudio();
+                      ref.watch(flagNotifierProvider.notifier).setFlag(true);
+                    }
+                  },
+                  child: timerIsRunning
+                      ? Text(Localization.of(context)?.translate('pause') ??
+                          'Pause')
+                      : Text(Localization.of(context)?.translate('resume') ??
+                          'Resume'),
+                ),
+                const SizedBox(width: 15),
+                ElevatedButton(
+                  onPressed: () {
+                    endSession();
+                  },
+                  child: Text(
+                      Localization.of(context)?.translate('end_session') ??
+                          'End session'),
+                )
+              ],
             ),
-            const SizedBox(width: 15),
-            ElevatedButton(
-              onPressed: () {
-                endSession();
-              },
-             child:  Text(Localization.of(context)?.translate('end_session') ?? 'End session'),
-            )
-        ],
-        ),
-      ) 
-      :
-     Padding(
-       padding: const EdgeInsets.all(24.0),
-       child: ElevatedButton(
-        onPressed: () => {playAudio(), startTimer()},
-         child:  Text(Localization.of(context)?.translate('start_timer') ?? 'Start timer'),
-        ),
-     );
+          )
+        : Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: ElevatedButton(
+              onPressed: () => {playAudio(), startTimer()},
+              child: Text(Localization.of(context)?.translate('start_timer') ??
+                  'Start timer'),
+            ),
+          );
   }
 
   void playAudio() {
@@ -156,103 +170,112 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
     audioPlayerManager.playAudio(selectedSongPath);
   }
 
-void endSession() async {
-  setState(() => timer?.cancel()); 
-  audioPlayerManager.stopAudio();
-  audioPlayerManager.dispose();
-  ref.watch(flagNotifierProvider.notifier).setFlag(false);
+  void endSession() async {
+    setState(() => timer?.cancel());
+    audioPlayerManager.stopAudio();
+    audioPlayerManager.dispose();
+    ref.watch(flagNotifierProvider.notifier).setFlag(false);
 
-  await showDialog(context: context, builder: (BuildContext context) {
-    return RatingDialog();
-  });
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RatingDialog();
+        });
 
-  addFinishedSession();
-  Navigator.pushNamed(context, '/');
-}
+    addFinishedSession();
+    Navigator.pushNamed(context, '/');
+  }
 
-void addFinishedSession() {
-  final finishedSessions = ref.watch(finishedSessionNotifierProvider.notifier);
-  final session = ref.watch(selectedSessionNotifierProvider);
-  final rating = ref.watch(ratingNotifierProvider);
+  void addFinishedSession() {
+    final finishedSessions =
+        ref.watch(finishedSessionNotifierProvider.notifier);
+    final session = ref.watch(selectedSessionNotifierProvider);
+    final rating = ref.watch(ratingNotifierProvider);
 
-  Session finishedSession = Session.sessionAndPeriodDurationInit(session.getSessionDuration() - sessionDuration, session.getPeriodDuration());
-  finishedSessions.addSession(finishedSession);
+    Session finishedSession = Session.sessionAndPeriodDurationInit(
+        session.getSessionDuration() - sessionDuration,
+        session.getPeriodDuration());
+    finishedSessions.addSession(finishedSession);
 
-  String newSession = Localization.of(context)?.translate('new_session') ?? 'New session';
-  String sessionTime = Localization.of(context)?.translate('session_time') ?? 'Session time';
-  String taskCompRate = Localization.of(context)?.translate('task_comp_rate') ?? 'Task completion rate';
-  String sessionRating = Localization.of(context)?.translate('rating') ?? 'Rating';
-  String noRating = Localization.of(context)?.translate('no_rating') ?? 'No rating';
+    String newSession =
+        Localization.of(context)?.translate('new_session') ?? 'New session';
+    String sessionTime =
+        Localization.of(context)?.translate('session_time') ?? 'Session time';
+    String taskCompRate =
+        Localization.of(context)?.translate('task_comp_rate') ??
+            'Task completion rate';
+    String sessionRating =
+        Localization.of(context)?.translate('rating') ?? 'Rating';
+    String noRating =
+        Localization.of(context)?.translate('no_rating') ?? 'No rating';
 
 // Then, format the string
-String textToAdd = '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
-    '$sessionTime: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
-    '$taskCompRate: ${((finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100).toStringAsFixed(0)}%\n'
-    '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
+    String textToAdd =
+        '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
+        '$sessionTime: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
+        '$taskCompRate: ${((finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100).toStringAsFixed(0)}%\n'
+        '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
 
-  sessionsBox.add(
-      textToAdd
-    );
-
-  Widget mainTimerDisplay() {
-    final Session session = ref.watch(selectedSessionNotifierProvider);
-
-    return SizedBox(
-      width: 150,
-      height: 150,
-
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          CircularProgressIndicator(
-            value: 1 - sessionDuration.inSeconds / session.getSessionDuration().inSeconds,
-            valueColor: AlwaysStoppedAnimation(Colors.green[500]),
-            backgroundColor: Colors.white,
-          ),
-      
-          Center(
-            child: Text(
-            '${sessionDuration.inMinutes.toString().padLeft(2, '0')}:${(sessionDuration.inSeconds % 60).toString().padLeft(2, '0')}',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40.0,
-              ),
-            ),
-          )
-          
-        ],
-      ),
-    );
+    sessionsBox.add(textToAdd);
   }
 
-  Widget phaseTimerDisplay() {
-    final Session session = ref.watch(selectedSessionNotifierProvider);
+    Widget mainTimerDisplay() {
+      final Session session = ref.watch(selectedSessionNotifierProvider);
 
-    return SizedBox(
-      width: 130,
-      height: 130,
-
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          CircularProgressIndicator(
-            value: 1 - phaseDuration.inSeconds / session.getPhaseDuration().inSeconds,
-            valueColor: AlwaysStoppedAnimation(Colors.green[300]),
-            backgroundColor: Colors.white,
-          ),
-      
-          Center(
-            child: Text(
-            '${phaseDuration.inMinutes.toString().padLeft(2, '0')}:${(phaseDuration.inSeconds % 60).toString().padLeft(2, '0')}',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40.0,
-              ),
+      return SizedBox(
+        width: 150,
+        height: 150,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            CircularProgressIndicator(
+              value: 1 -
+                  sessionDuration.inSeconds /
+                      session.getSessionDuration().inSeconds,
+              valueColor: AlwaysStoppedAnimation(Colors.green[500]),
+              backgroundColor: Colors.white,
             ),
-          )
-          
-        ],
-      ),
-    );
-  }
+            Center(
+              child: Text(
+                '${sessionDuration.inMinutes.toString().padLeft(2, '0')}:${(sessionDuration.inSeconds % 60).toString().padLeft(2, '0')}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40.0,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget phaseTimerDisplay() {
+      final Session session = ref.watch(selectedSessionNotifierProvider);
+
+      return SizedBox(
+        width: 130,
+        height: 130,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            CircularProgressIndicator(
+              value: 1 -
+                  phaseDuration.inSeconds /
+                      session.getPhaseDuration().inSeconds,
+              valueColor: AlwaysStoppedAnimation(Colors.green[300]),
+              backgroundColor: Colors.white,
+            ),
+            Center(
+              child: Text(
+                '${phaseDuration.inMinutes.toString().padLeft(2, '0')}:${(phaseDuration.inSeconds % 60).toString().padLeft(2, '0')}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40.0,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
 }
