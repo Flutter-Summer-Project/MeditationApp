@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:meditation_app/localization.dart';
 import 'package:meditation_app/boxes.dart';
+import 'package:meditation_app/providers/comment_provider.dart';
 
 
 class SessionListWidget extends ConsumerStatefulWidget {
@@ -46,24 +47,37 @@ class _SessionListWidgetState extends ConsumerState<SessionListWidget> {
                 itemCount: sessions.length >= sessionsDisplayed ? sessionsDisplayed : sessions.length,
                 itemExtent: 95,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.all(3),
-                    constraints: const BoxConstraints.tightFor(
-                      width: double.infinity,
-                      height: double.infinity,
+                  return GestureDetector(
+                    child: Container(
+                      margin: const EdgeInsets.all(3),
+                      constraints: const BoxConstraints.tightFor(
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                      decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey[300]
                     ),
-                    decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey[300]
-                  ),
-                    child: Center(child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        sessions[index]
-                        ),
+                      child: Center(child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          sessions[index]
+                          ),
+                      ),
+                      )
                     ),
-                    )
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("${sessions[index]}\nComment: ${ref.read(commentNotifierProvider)}"),
+                            );
+                          }
+                      );
+                      }
+,
                   );
                 }
                 
