@@ -72,7 +72,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
     }
     );
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +88,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-             Text(Localization.of(context)?.translate('session_timer') ?? 'Session Timer', style: TextStyle(fontSize: 20),),
+            Text(Localization.of(context)?.translate('session_timer') ?? 'Session Timer', style: TextStyle(fontSize: 20),),
             mainTimerDisplay(),
             const SizedBox(height: 16),
             Text(_breathingStatus, style: const TextStyle(fontSize: 20),),
@@ -103,7 +102,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
       ),
     );
   }
-
 
   @override
   void dispose() {
@@ -160,7 +158,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
     audioPlayerManager.playAudio(selectedSongPath);
   }
 
-void endSession() async {
+  void endSession() async {
   setState(() => timer?.cancel()); 
   audioPlayerManager.stopAudio();
   audioPlayerManager.dispose();
@@ -174,29 +172,44 @@ void endSession() async {
   Navigator.pushNamed(context, '/');
 }
 
-void addFinishedSession() {
-  final finishedSessions = ref.watch(finishedSessionNotifierProvider.notifier);
-  final session = ref.watch(selectedSessionNotifierProvider);
-  final rating = ref.watch(ratingNotifierProvider);
+  void addFinishedSession() {
+    final finishedSessions = ref.watch(
+        finishedSessionNotifierProvider.notifier);
+    final session = ref.watch(selectedSessionNotifierProvider);
+    final rating = ref.watch(ratingNotifierProvider);
 
-  Session finishedSession = Session.sessionAndPeriodDurationInit(session.getSessionDuration() - sessionDuration, session.getPeriodDuration());
-  finishedSessions.addSession(finishedSession);
+    Session finishedSession = Session.sessionAndPeriodDurationInit(
+        session.getSessionDuration() - sessionDuration,
+        session.getPeriodDuration());
+    finishedSessions.addSession(finishedSession);
 
-  String newSession = Localization.of(context)?.translate('new_session') ?? 'New session';
-  String sessionTime = Localization.of(context)?.translate('session_time') ?? 'Session time';
-  String taskCompRate = Localization.of(context)?.translate('task_comp_rate') ?? 'Task completion rate';
-  String sessionRating = Localization.of(context)?.translate('rating') ?? 'Rating';
-  String noRating = Localization.of(context)?.translate('no_rating') ?? 'No rating';
+    String newSession = Localization.of(context)?.translate('new_session') ??
+        'New session';
+    String sessionTime = Localization.of(context)?.translate('session_time') ??
+        'Session time';
+    String taskCompRate = Localization.of(context)?.translate(
+        'task_comp_rate') ?? 'Task completion rate';
+    String sessionRating = Localization.of(context)?.translate('rating') ??
+        'Rating';
+    String noRating = Localization.of(context)?.translate('no_rating') ??
+        'No rating';
 
 // Then, format the string
-String textToAdd = '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
-    '$sessionTime: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
-    '$taskCompRate: ${((finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100).toStringAsFixed(0)}%\n'
-    '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
+    String textToAdd = '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(
+        DateTime.now())}\n'
+        '$sessionTime: ${Session.formattedDuration(
+        finishedSession.getSessionDuration())}\n'
+        '$taskCompRate: ${((finishedSession
+        .getSessionDuration()
+        .inSeconds / session
+        .getSessionDuration()
+        .inSeconds) * 100).toStringAsFixed(0)}%\n'
+        '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
 
-  sessionsBox.add(
-      textToAdd
+    sessionsBox.add(
+        textToAdd
     );
+  }
 
   Widget mainTimerDisplay() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
@@ -255,7 +268,6 @@ String textToAdd = '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTim
               ),
             ),
           )
-          
         ],
       ),
     );
