@@ -27,7 +27,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   bool sessionDurationInitialized = false;
   Timer? timer;
   final AudioPlayerManager audioPlayerManager = AudioPlayerManager();
-  String _breathingStatus = 'Breathe in';
+
 
   Future<void> initializeAudioPlayer() async {
     if (mounted) {
@@ -36,6 +36,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   }
 
   void startTimer() {
+    String _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
     final Session session = ref.watch(selectedSessionNotifierProvider);
 
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -74,6 +75,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
 
   @override
   Widget build(BuildContext context) {
+    String _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
     final Session session = ref.watch(selectedSessionNotifierProvider);
 
     if (!sessionDurationInitialized) {

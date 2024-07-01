@@ -6,4 +6,4 @@ linter:
     prefer_const_constructors: false
     unnecessary_null_comparison: false
     invalid_use_of_protected_member: false
-    
+
