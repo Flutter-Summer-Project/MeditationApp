@@ -27,7 +27,6 @@ class Localization {
 
   String translate(String key) {
     final translated = _localizedStrings[key];
-    print('$key -> $translated');
     return translated ?? key;
   }
 }
