@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meditation_app/localization.dart';
 import 'package:meditation_app/providers/selected_song_provider.dart';
 
 class SongSelectionWidget extends ConsumerStatefulWidget {
@@ -18,7 +19,7 @@ class _SongSelectionWidgetState extends ConsumerState<SongSelectionWidget> {
         constraints: const BoxConstraints(maxWidth: 300),
         child: Column(
         children: [
-          const Text("Choose a song:"),
+           Text(Localization.of(context)?.translate('select_song') ?? 'Select a song:'),
           ...List.generate(
             3,
             (index) => RadioListTile<int>(
@@ -65,7 +66,7 @@ class _SongSelectionWidgetState extends ConsumerState<SongSelectionWidget> {
   }
 
   String getButtonName(int buttonNumber) {
-    final buttonNames = ['Beach', 'Birds', 'Flute'];
+    final buttonNames = [Localization.of(context)?.translate('beach') ?? 'Beach', Localization.of(context)?.translate('birds') ?? 'Birds', Localization.of(context)?.translate('flute') ?? 'Flute'];
     return buttonNames[buttonNumber];
   }
 

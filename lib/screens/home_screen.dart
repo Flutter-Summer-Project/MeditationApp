@@ -2,6 +2,9 @@ import 'package:meditation_app/widgets/default_app_bar.dart';
 import 'package:meditation_app/widgets/session_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meditation_app/widgets/language_switcher.dart';
+import 'package:meditation_app/localization.dart';
+
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +17,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Meditation Helper", ref: ref),
+      appBar: DefaultAppBar(
+        title: Localization.of(context)?.translate('app_title') ?? 'Meditation Helper',
+        ref: ref,
+      ),
       body: Container(
         margin: const EdgeInsets.all(30),
         child: Column(
@@ -22,14 +28,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             const SessionListWidget(),
             FilledButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/session_preferences');
-                },
-                child: const Text("Start new session")
-            )
-          ]
+              onPressed: () {
+                Navigator.pushNamed(context, '/session_preferences');
+              },
+              child: Text(Localization.of(context)?.translate('start_new_session') ?? 'Start new session'),
+            ),
+          ],
         ),
       ),
+      floatingActionButton: LanguageSwitcher(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }

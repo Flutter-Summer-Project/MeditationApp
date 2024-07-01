@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meditation_app/widgets/session_summary_widget.dart';
+import 'package:meditation_app/widgets/language_switcher.dart';
+import 'package:meditation_app/localization.dart';
 
 
 class PostSessionScreen extends ConsumerStatefulWidget {
@@ -15,9 +17,9 @@ class _PostSessionScreenState extends ConsumerState<PostSessionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Session Summary",
-          style: TextStyle(
+        title: Text(
+          Localization.of(context)?.translate('session_summary') ?? 'Session Summary',
+          style: const TextStyle(
             color: Colors.white,
             shadows: <Shadow>[
               Shadow(
@@ -27,7 +29,7 @@ class _PostSessionScreenState extends ConsumerState<PostSessionScreen> {
               ),
             ],
           ),
-          ),
+        ),
         backgroundColor: Colors.blue[900],
       ),
       body: Center(
@@ -47,12 +49,14 @@ class _PostSessionScreenState extends ConsumerState<PostSessionScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text('Main screen'),
+                child: Text(Localization.of(context)?.translate('main_screen') ?? 'Main screen'),
               ),
             ),
           ],
         ),
       ),
+      floatingActionButton: LanguageSwitcher(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
