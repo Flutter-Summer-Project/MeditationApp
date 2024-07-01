@@ -11,8 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-
-import 'package:hive/hive.dart';
+import 'package:meditation_app/boxes.dart';
 
 
 class Timerwidget extends ConsumerStatefulWidget {
@@ -27,21 +26,8 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   late Duration phaseDuration;
   bool sessionDurationInitialized = false;
   Timer? timer;
-  late Box<String> box;
   final AudioPlayerManager audioPlayerManager = AudioPlayerManager();
   String _breathingStatus = 'Breathe in';
-
-  @override
-  void initState() {
-    super.initState();
-    openBox();
-    box = Hive.box<String>('sessionBox');
-    initializeAudioPlayer();
-  }
-
-  Future<void> openBox() async {
-    await Hive.openBox<String>('sessionBox');
-  }
 
   Future<void> initializeAudioPlayer() async {
     await audioPlayerManager.init();
@@ -192,7 +178,7 @@ void addFinishedSession() {
   Session finishedSession = Session.sessionAndPeriodDurationInit(session.getSessionDuration() - sessionDuration, session.getPeriodDuration());
   finishedSessions.addSession(finishedSession);
   
-  box.add(
+  sessionsBox.add(
       'Time: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
       'Session time: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
       'Task completion rate: ${(
