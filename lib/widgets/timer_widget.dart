@@ -15,7 +15,6 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:meditation_app/boxes.dart';
 import 'package:meditation_app/widgets/animated_timer.dart';
-import 'dart:math';
 
 class Timerwidget extends ConsumerStatefulWidget {
   const Timerwidget({super.key});
@@ -31,7 +30,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   Timer? timer;
   final AudioPlayerManager audioPlayerManager = AudioPlayerManager();
 
-
   Future<void> initializeAudioPlayer() async {
     if (mounted) {
       setState(() {});
@@ -41,7 +39,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   void startTimer() {
     String _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
     final Session session = ref.watch(selectedSessionNotifierProvider);
-
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         if (sessionDuration.inSeconds <= 0) {
@@ -176,7 +173,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
     audioPlayerManager.playAudio(selectedSongPath);
   }
 
-void endSession() async {
+  void endSession() async {
   setState(() => timer?.cancel()); 
   audioPlayerManager.stopAudio();
   audioPlayerManager.dispose();
@@ -192,7 +189,7 @@ void endSession() async {
 
   void addFinishedSession() {
     final finishedSessions =
-        ref.watch(finishedSessionNotifierProvider.notifier);
+    ref.watch(finishedSessionNotifierProvider.notifier);
     final session = ref.watch(selectedSessionNotifierProvider);
     final rating = ref.watch(ratingNotifierProvider);
 
@@ -215,14 +212,21 @@ void endSession() async {
 
 // Then, format the string
     String textToAdd =
-        '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n'
-        '$sessionTime: ${Session.formattedDuration(finishedSession.getSessionDuration())}\n'
-        '$taskCompRate: ${((finishedSession.getSessionDuration().inSeconds / session.getSessionDuration().inSeconds) * 100).toStringAsFixed(0)}%\n'
+        '$newSession: ${DateFormat('dd/MM/yyyy HH:mm').format(
+        DateTime.now())}\n'
+        '$sessionTime: ${Session.formattedDuration(
+        finishedSession.getSessionDuration())}\n'
+        '$taskCompRate: ${((finishedSession
+        .getSessionDuration()
+        .inSeconds / session
+        .getSessionDuration()
+        .inSeconds) * 100).toStringAsFixed(0)}%\n'
         '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
 
-  sessionsBox.add(
-      textToAdd
+    sessionsBox.add(
+        textToAdd
     );
+  }
 
   Widget mainTimerDisplay() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
@@ -249,12 +253,13 @@ void endSession() async {
               fontSize: 40.0,
               ),
             ),
-            Center(
-              child: Text(
-                '${sessionDuration.inMinutes.toString().padLeft(2, '0')}:${(sessionDuration.inSeconds % 60).toString().padLeft(2, '0')}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40.0,
+          ),
+          Center(
+            child: Text(
+              '${sessionDuration.inMinutes.toString().padLeft(2, '0')}:${(sessionDuration.inSeconds % 60).toString().padLeft(2, '0')}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 40.0,
                 ),
               ),
             )
@@ -263,7 +268,7 @@ void endSession() async {
       );
     }
 
-    Widget phaseTimerDisplay() {
+  Widget phaseTimerDisplay() {
       final Session session = ref.watch(selectedSessionNotifierProvider);
 
       return SizedBox(
