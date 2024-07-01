@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:meditation_app/localization.dart';
 import 'package:meditation_app/boxes.dart';
+
 
 class SessionListWidget extends ConsumerStatefulWidget {
   const SessionListWidget({super.key});
@@ -32,8 +34,8 @@ class _SessionListWidgetState extends ConsumerState<SessionListWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (sessions.isNotEmpty) 
-                const Text(
-                'Session List',
+                 Text(
+                Localization.of(context)?.translate('session_list') ?? 'Session list',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               

@@ -1,3 +1,4 @@
+import 'package:meditation_app/localization.dart';
 import 'package:meditation_app/providers/comment_provider.dart';
 import 'package:meditation_app/providers/rating_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,11 @@ class _RatingDialogState extends ConsumerState<RatingDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Rate Your Experience'),
+      title: Text(Localization.of(context)?.translate('rate_session') ?? 'Rate Your Experience'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Text('Write your feelings/thoughts during the session'),
+           Text(Localization.of(context)?.translate('comment') ?? 'Write your feelings/thoughts during the session'),
           const SizedBox(height: 8),
           TextField(
             onChanged: (text) {
@@ -27,7 +28,7 @@ class _RatingDialogState extends ConsumerState<RatingDialog> {
             maxLines: 2,
           ),
           const SizedBox(height: 8),
-          const Text('How would you rate your experience?'),
+           Text(Localization.of(context)?.translate('end_rating') ?? 'How would you rate your experience?'),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(5, (index) {
@@ -51,14 +52,14 @@ class _RatingDialogState extends ConsumerState<RatingDialog> {
       ),
       actions: <Widget>[
         ElevatedButton(
-          child: const Text('Cancel'),
+          child:  Text(Localization.of(context)?.translate('cancel') ?? 'Cancel'),
           onPressed: () {
             ref.read(ratingNotifierProvider.notifier).setRating('');
             Navigator.pop(context);
           },
         ),
         ElevatedButton(
-          child: const Text('Submit'),
+          child:  Text(Localization.of(context)?.translate('submit') ?? 'Submit'),
           onPressed:  _rating != null
               ? () {
                   ref.read(ratingNotifierProvider.notifier).setRating(_rating.toString());

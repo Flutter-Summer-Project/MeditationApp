@@ -1,3 +1,5 @@
+import 'package:meditation_app/localization.dart';
+
 class Session {
   final Duration _sessionDuration;
   final Duration _periodDuration;
@@ -33,11 +35,11 @@ class Session {
     return "${duration.inMinutes.toString().padLeft(2, '0')}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}";
   }
 
-  String info() {
+  String info(context) {
     String phaseDuration = formattedDuration(getPhaseDuration());
     String periodDuration = formattedDuration(getPeriodDuration());
     String sessioonDuration = formattedDuration(getSessionDuration());
 
-    return "Phase duration: $phaseDuration\nPeriod duration: $periodDuration\nRepetitions: $_repetitions\nOverall session duration: $sessioonDuration";
+    return "${Localization.of(context)?.translate('phase_duration') ?? 'Phase duration'}: $phaseDuration\n${Localization.of(context)?.translate('period_duration') ?? 'Period duration'}: $periodDuration\n${Localization.of(context)?.translate('reps') ?? 'Repetitions'}: $_repetitions\n${Localization.of(context)?.translate('overall_duration') ?? 'Overall session duration'}: $sessioonDuration";
   }
 }

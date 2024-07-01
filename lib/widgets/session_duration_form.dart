@@ -3,6 +3,7 @@ import 'package:meditation_app/widgets/session_overview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meditation_app/providers/selected_session_provider.dart';
+import 'package:meditation_app/localization.dart';
 
 class SessionDurationForm extends ConsumerStatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Time of a phase"),
+                  Text(Localization.of(context)?.translate('time_of_phase') ?? 'Time of a phase'),
                   periodDuration(),
                   Flexible(
                     flex: 1,
@@ -53,8 +54,8 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
   TextFormField repetitionsForm() {
     return TextFormField(
       initialValue: '3',
-      decoration: const InputDecoration(
-        labelText: 'Number of repetitions',
+      decoration:  InputDecoration(
+        labelText: Localization.of(context)?.translate('repetitions') ?? 'Number of repetitions',
       ),
       keyboardType: TextInputType.number,
       onChanged: (value) {
@@ -83,11 +84,11 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Session overview'),
+                    title:  Text(Localization.of(context)?.translate('session_overview') ?? 'Session overview'),
                     content: const SessionOverviewWidget(),
                     actions: [
                       TextButton(
-                        child: const Text('Back'),
+                        child:  Text(Localization.of(context)?.translate('back') ?? 'Back'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -98,7 +99,7 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
               );
           }
         },
-        child: const Text('Submit'),
+        child:  Text(Localization.of(context)?.translate('submit') ?? 'Submit'),
       ),
     );
   }
@@ -125,8 +126,8 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
   TextFormField secondsForm() {
     return TextFormField(
       initialValue: '10',
-      decoration: const InputDecoration(  
-        labelText: 'Seconds',
+      decoration:  InputDecoration(  
+        labelText: Localization.of(context)?.translate('seconds') ?? 'Seconds',
       ),
       keyboardType: TextInputType.number,
       onChanged: (value) {
@@ -140,8 +141,8 @@ class _SessionDurationFormState extends ConsumerState<SessionDurationForm> {
   TextFormField minutesForm() {
     return TextFormField(
       initialValue: '0',
-      decoration: const InputDecoration(
-        labelText: 'Minutes',
+      decoration:  InputDecoration(
+        labelText: Localization.of(context)?.translate('minutes') ?? 'Minutes',
       ),
       keyboardType: TextInputType.number,
       onChanged: (value) {

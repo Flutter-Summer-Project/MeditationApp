@@ -1,3 +1,4 @@
+import 'package:meditation_app/localization.dart';
 import 'package:meditation_app/providers/selected_session_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +27,7 @@ class _SessionOverviewWidgetState extends ConsumerState<SessionOverviewWidget> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    selectedSession.info(),
+                    selectedSession.info(context),
                     style: const TextStyle(fontSize: 24),
                   ),
                 ),
@@ -44,7 +45,7 @@ class _SessionOverviewWidgetState extends ConsumerState<SessionOverviewWidget> {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
-                child: const Text("Start session"),
+                child: Text(Localization.of(context)?.translate('start_session') ?? 'Start session'),
               ),
             ],
           ),
