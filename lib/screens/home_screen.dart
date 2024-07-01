@@ -14,7 +14,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Meditation Helper", ref: ref),
+      appBar: DefaultAppBar(title: "Meditation Helper", automaticallyImplyLeading: false, ref: ref),
       body: Container(
         margin: const EdgeInsets.all(30),
         child: Column(

@@ -4,6 +4,7 @@ import 'package:meditation_app/providers/selected_session_provider.dart';
 import 'package:meditation_app/providers/selected_song_provider.dart';
 import 'package:meditation_app/providers/session_provider.dart';
 import 'package:meditation_app/audio_player.dart';
+import 'package:meditation_app/providers/timer_provider.dart';
 import 'package:meditation_app/session.dart';
 import 'package:meditation_app/widgets/rating_widget.dart';
 import 'package:meditation_app/widgets/heartbeat_animation_widget.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:meditation_app/boxes.dart';
+import 'package:meditation_app/widgets/animated_timer.dart';
+import 'dart:math';
 
 
 class Timerwidget extends ConsumerStatefulWidget {
@@ -37,7 +40,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
 
   void startTimer() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
-
+    ref.watch(timerProvider.notifier).setTimerValue(ref.watch(selectedSessionNotifierProvider).getSessionDuration().inSeconds);
     timer = Timer.periodic(const Duration(seconds: 1), (_){
       setState(() {
         if (sessionDuration.inSeconds <= 0) {
@@ -63,6 +66,7 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
 
         sessionDuration -= const Duration(seconds: 1);
         phaseDuration -= const Duration(seconds: 1);
+        ref.watch(timerProvider.notifier).setTimerValue(sessionDuration.inSeconds);
       });
     }
     );
@@ -160,7 +164,7 @@ void endSession() async {
   audioPlayerManager.stopAudio();
   audioPlayerManager.dispose();
   ref.watch(flagNotifierProvider.notifier).setFlag(false);
-
+  ref.watch(timerProvider.notifier).setTimerValue(0);
   await showDialog(context: context, builder: (BuildContext context) {
     return RatingDialog();
   });
@@ -188,7 +192,6 @@ void addFinishedSession() {
 }
   Widget mainTimerDisplay() {
     final Session session = ref.watch(selectedSessionNotifierProvider);
-
     return SizedBox(
       width: 150,
       height: 150,
@@ -196,12 +199,14 @@ void addFinishedSession() {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CircularProgressIndicator(
-            value: 1 - sessionDuration.inSeconds / session.getSessionDuration().inSeconds,
-            valueColor: AlwaysStoppedAnimation(Colors.green[500]),
-            backgroundColor: Colors.white,
+          SizedBox(
+            width: 300,
+            height: 300,
+            child: CustomPaint(painter: AnimatedTimer(
+                ref: ref,
+                totalTimerDuration: session.getSessionDuration().inSeconds
+            ))
           ),
-      
           Center(
             child: Text(
             '${sessionDuration.inMinutes.toString().padLeft(2, '0')}:${(sessionDuration.inSeconds % 60).toString().padLeft(2, '0')}',

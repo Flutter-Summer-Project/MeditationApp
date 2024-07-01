@@ -17,7 +17,7 @@ class _SessionscreenState extends ConsumerState<SessionScreen> {
     return Consumer(
       builder: (context, ref, child) {        
         return Scaffold(
-          appBar: DefaultAppBar(title: "Meditation", ref: ref),
+          appBar: DefaultAppBar(title: "Meditation", automaticallyImplyLeading: false, ref: ref),
           body: Container(
             child: const Timerwidget(),
           ),

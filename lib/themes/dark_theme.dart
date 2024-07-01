@@ -26,5 +26,6 @@ var darkTheme = ThemeData(
                 )
             )
         )
-    )
+    ),
+    scaffoldBackgroundColor: Colors.black87
 );

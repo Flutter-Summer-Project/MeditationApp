@@ -16,7 +16,7 @@ class _sessionPreferencesScreenState extends ConsumerState<SessionPreferencesScr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Start New Meditation", ref: ref),
+      appBar: DefaultAppBar(title: "Start New Meditation", automaticallyImplyLeading: true, ref: ref),
       body: Column(
         children: [
           Expanded(

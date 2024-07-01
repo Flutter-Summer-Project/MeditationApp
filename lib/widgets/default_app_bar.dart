@@ -3,7 +3,8 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 class DefaultAppBar extends AppBar {
-  DefaultAppBar({required String title, required WidgetRef ref, super.key}) : super(
+  DefaultAppBar({required String title, required WidgetRef ref,
+    required super.automaticallyImplyLeading, super.key}) : super(
     title: Text(
       title,
       style: const TextStyle(
@@ -24,6 +25,6 @@ class DefaultAppBar extends AppBar {
         const Icon(Icons.light_mode_rounded) :
         const Icon(Icons.dark_mode_rounded),
       )
-    ],
+    ]
   );
 }
