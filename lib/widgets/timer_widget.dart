@@ -30,7 +30,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   String _breathingStatus = 'Breathe in';
 
   Future<void> initializeAudioPlayer() async {
-    await audioPlayerManager.init();
     if (mounted) {
       setState(() {});
     }
