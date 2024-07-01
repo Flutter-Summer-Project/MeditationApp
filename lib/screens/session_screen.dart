@@ -22,6 +22,7 @@ class _SessionScreenState extends ConsumerState<SessionScreen> {
           body: Container(
             child: const Timerwidget(),
           ),
+
           floatingActionButton: LanguageSwitcher(),
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         );
