@@ -72,7 +72,7 @@ class _SessionListWidgetState extends ConsumerState<SessionListWidget> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("${sessions[index]}\nComment: ${ref.read(commentNotifierProvider)}"),
+                              title: Text(sessions[index]),
                             );
                           }
                       );

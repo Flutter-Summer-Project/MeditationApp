@@ -15,6 +15,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:meditation_app/boxes.dart';
 import 'package:meditation_app/widgets/animated_timer.dart';
+import 'package:meditation_app/providers/comment_provider.dart';
 
 class Timerwidget extends ConsumerStatefulWidget {
   const Timerwidget({super.key});
@@ -26,6 +27,7 @@ class Timerwidget extends ConsumerStatefulWidget {
 class _TimerwidgetState extends ConsumerState<Timerwidget> {
   late Duration sessionDuration;
   late Duration phaseDuration;
+  String _breathingStatus = '';
   bool sessionDurationInitialized = false;
   Timer? timer;
   final AudioPlayerManager audioPlayerManager = AudioPlayerManager();
@@ -37,7 +39,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
   }
 
   void startTimer() {
-    String _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
     final Session session = ref.watch(selectedSessionNotifierProvider);
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
@@ -76,7 +77,6 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
 
   @override
   Widget build(BuildContext context) {
-    String _breathingStatus = Localization.of(context)?.translate('breathe_in') ?? 'Breathe in';
     final Session session = ref.watch(selectedSessionNotifierProvider);
 
     if (!sessionDurationInitialized) {
@@ -221,7 +221,8 @@ class _TimerwidgetState extends ConsumerState<Timerwidget> {
         .inSeconds / session
         .getSessionDuration()
         .inSeconds) * 100).toStringAsFixed(0)}%\n'
-        '$sessionRating: ${rating == '' ? noRating : '$rating/5'}';
+        '$sessionRating: ${rating == '' ? noRating : '$rating/5'}'
+        '\nComment: ${ref.watch(commentNotifierProvider)}\n';
 
     sessionsBox.add(
         textToAdd
